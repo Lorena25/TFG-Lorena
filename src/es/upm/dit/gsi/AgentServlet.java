@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.wpi.disco.Agent;
+import edu.wpi.disco.Disco;
 import edu.wpi.disco.Interaction;
 import edu.wpi.disco.User;
 import edu.wpi.disco.Agenda.Plugin;
 import edu.wpi.disco.lang.Propose;
+import edu.wpi.disco.lang.Propose.ShouldNot;
+import edu.wpi.disco.lang.Utterance;
+import edu.wpi.disco.plugin.ProposeShouldNotPlugin;
 import es.upm.dit.gsi.agent.Agent1;
 import es.upm.dit.gsi.agent.Agent1.MyAgent;
 
@@ -26,6 +30,7 @@ import javax.servlet.http.HttpSession;
 public class AgentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected String path = null;
+	private String[] args;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -53,19 +58,23 @@ public class AgentServlet extends HttpServlet {
 		}
 		
 		Agent1 agente= (Agent1)misession.getAttribute("misessionagent");
-		Interaction interaction = new Interaction(new Agent("agent"), new User("user"));
+		Interaction interaction = agente.interact2();
+		Disco disco = interaction.getDisco();
 		interaction.load(path);
-		agente.user(Propose.Should.newInstance(interaction.getDisco(), true, interaction.getTaskClass("Borrow").newInstance()),
+		agente.agente(interaction, disco);
+		//agente.user(Propose.Should.newInstance(disco, true, interaction.getTaskClass("Borrow").newInstance()),
 		           // null argument allows plan recognition to determine contributes
-		           null); 
-		agente.agent();
-        List<Plugin.Item> items = interaction.getExternal().generate(interaction);
-        for (Plugin.Item item : items) 
-           System.out.println("MENU: "+interaction.format(item, true, true));
-        // choose second utterance from menu
-        Plugin.Item item = items.get(1);
-        agente.user(item.task, item.contributes);
-
+		       //    null, interaction); 
+		//agente.agent(interaction);
+		 //agente.lorena(interaction, disco);
+		//System.out.println(Propose.Should.newInstance(disco, true, interaction.getTaskClass("Borrow").newInstance()));
+		
+		//interaction.occurred(true, interaction.getTaskClass("GoToLibrary").newInstance(), null);
+  //  System.out.println(Propose.Should.newInstance(disco, true, interaction.getTaskClass("GoToLibrary").newInstance())); 
+	//agente.agent(interaction);
+   // agente.lorena(interaction, disco);
+	
+       
 		
 		
 		

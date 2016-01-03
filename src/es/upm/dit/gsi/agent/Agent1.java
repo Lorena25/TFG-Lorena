@@ -2,10 +2,12 @@ package es.upm.dit.gsi.agent;
 
 import java.util.List;
 
+import es.upm.dit.gsi.*;
 import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
 import edu.wpi.disco.Agenda.Plugin;
 import edu.wpi.disco.lang.*;
+import edu.wpi.disco.Agent;
 
 /**
  * This class illustrates the appropriate methods to use to embed Disco 
@@ -28,82 +30,139 @@ import edu.wpi.disco.lang.*;
 public class Agent1 {
 
    public  void main (String[] args) { new Agent1(); }
-   
-   private final Interaction interaction = new Interaction(new MyAgent("agent"), new User("user"));
-   private final Disco disco = interaction.getDisco(); 
-   private final boolean 
-         guess = interaction.getProperty("interaction@guess", true),
-         retry = interaction.getProperty("interaction@retry", true);
-   
-   public void lorena() {
-         
-      // note the try block below creating ConsoleWindow is optional and creates a Disco
-      // console window that runs in parallel with the embedding system. This is convenient
-      // for debugging, such as using the 'history' or 'status' commands and using
-      // 'eval' to check or set application state.
-    //  try (ConsoleWindow window = new ConsoleWindow(interaction, 600, 500, 14)) {
-         
-       //  window.setVisible(true);
-
-         // the code below is running on the *main* thread, but think of this as an
-         // example of the appropriate thread in the embedding application
-
-         // using example task model from Disco source release
-        //interaction.load("models/Library.xml");//(CAMBIAAR)
-
-         // typically the embedding system is calling Disco inside of a loop,
-         // but here we just have straight-line code to illustrate some
-         // typical calls
-
-         // user utterance, e.g., from speech recognition or GUI
-       
-
-         // example of generating menu of possible user utterances, e.g., for GUI
-         // or to restrict grammar for speech recognition
-
-         // print out formatted choices on system console
+   //Interaction interaction = interact2();
+private final Agent agent = new MyAgent("agent");
+private final User user = new User("user");
+  // private final Disco disco = interaction.getDisco(); 
+   //private final boolean 
+     //    guess = interaction.getProperty("interaction@guess", true),
+       // retry = interaction.getProperty("interaction@retry", true);
+public String agente (Interaction interaction, Disco disco) {
     
+  
+       user(Propose.Should.newInstance(disco, true, newInstance("Borrow", interaction)),
+             null, interaction); 
 
-         // if optional Disco console window used, go to window now and try typing in 
-         // commands, such as 'history'
-      
-         // next line is here only to keep optional Disco console window open in 
-         // this demo until you type 'quit' or close it
-         try { interaction.join(); } catch (InterruptedException e) {}
-      }
-//}
+       agent(interaction);
+       
+       List<Plugin.Item> items1 = interaction.getExternal().generate(interaction);
+       // print out formatted choices on system console
+     menu(interaction);
+       // choose second utterance from menu
+      // Plugin.Item item = items1.get(1);
+     //  user(item.task, item.contributes, interaction);
+
+
+       user(newInstance("GoToLibrary", interaction), null, interaction);
+
+
+       agent(interaction);
+
+  
+  menu(interaction);
+     
+
+       user(new Propose.What(disco, true, 
+             newInstance("ChooseBook", interaction), 
+             "input", 
+             interaction.eval("new Book(\"Sawyer\", \"Mindscan\")", "ComponentExample")),
+             null, interaction);
+
+
+       agent(interaction);
+
+       // example of generating menu of possible user utterances, e.g., for GUI
+       // or to restrict grammar for speech recognition
+
+     menu(interaction);
+       // choose second utterance from menu
+        //item = items.get(0);
+      // user(item.task, item.contributes, interaction);
+
+       return "";
+    }
+
+public void menu (Interaction interaction){
+	 List<Plugin.Item> items = interaction.getExternal().generate(interaction);
+     // print out formatted choices on system console
+     System.out.println();
+     for (Plugin.Item item : items) 
+        System.out.println("MENU: "+interaction.format(item, true, true));
+}
+ 
+   public void lorena(Interaction interaction, Disco disco) {
+     
+	   	Boolean retry = interaction.getProperty("interaction@retry", true);
+	         List<Plugin.Item> items = user.generate(interaction);
+	         
+	        // agent.occurred(interaction, items.get(0), retry);
+	        System.out.println(items.get(0));
+	         // print out formatted choices on system console
+	         for (Plugin.Item item : items) {
+	            System.out.println("MENU: "+interaction.format(item, true, true));
+	            ;}
+	         // choose second utterance from menu
+	         Plugin.Item item = items.get(0);
+	        // System.out.println(items.get(0));
+	        user(item.task, item.contributes, interaction);
+	      
+	       System.out.println(items);
+	      
+	        
+	         // if optional Disco console window used, go to window now and try typing in 
+	         // commands, such as 'history'
+	      
+	         // next line is here only to keep optional Disco console window open in 
+	         // this demo until you type 'quit' or close it
+	       
+	      }
    
-public void interact(){
-   user(Propose.Should.newInstance(disco, true, newInstance("Borrow")),
-           // null argument allows plan recognition to determine contributes
-           null); 
+   public Interaction interact2() { 
+	   Interaction interaction = new Interaction(agent, new User("user"));
+	  return interaction;
+	   } 
+   
 
-     // agent response
-     agent();}
 
-   public boolean agent () {      
-      // see simple model for agent turn at Agent.respond()
-      return interaction.getSystem().respond(interaction, false, guess, retry);
+  public boolean agent (Interaction interaction) {      
+       //see simple model for agent turn at Agent.respond()
+      return interaction.getSystem().respond(interaction, false, interaction.getProperty("interaction@guess", true),
+    		  interaction.getProperty("interaction@retry", true));
    }
    
-   public void user (Task task, Plan contributes) {
+   public void user (Task task, Plan contributes, Interaction interaction) {
       interaction.occurred(true, task, contributes);
    }
    
-   private Task newInstance (String task) { 
+   public Task newInstance (String task, Interaction interaction) { 
       return interaction.getTaskClass(task).newInstance();
    }
    
+
+  
   public class MyAgent extends Agent {
       
      public MyAgent (String name) { super(name); }
+     
+     public void occurred (Interaction interaction, Plugin.Item item, boolean retry) { 
+         synchronized (interaction) { // typically used in dialogue loop
+            interaction.occurred(this == interaction.getExternal(), 
+                  item.task, item.contributes);
+            if ( item.task instanceof Utterance ) { // after occurred
+               lastUtterance = (Utterance) item.task;
+               say(interaction, (Utterance) item.task);
+            }
+            if ( retry ) retry(interaction.getDisco());  // see also in respond
+         }
+      }
       
-      @Override
+     // @Override
       public void say (Interaction interaction, Utterance utterance) {
          // here is where you would put natural language generation
          // and/or pass utterance string to TTS or GUI
          // for now we just call Disco's default formatting and print
          // out result on system console
+    	System.out.println();
          System.out.println("AGENT: "+interaction.format(utterance));
       }
    }
