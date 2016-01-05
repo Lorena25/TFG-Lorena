@@ -1,8 +1,12 @@
 package es.upm.dit.gsi;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
+import com.google.gson.Gson;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import edu.wpi.disco.Agent;
 import edu.wpi.disco.Disco;
 import edu.wpi.disco.Interaction;
@@ -22,6 +26,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.json.JSONObject;
 
 /**
  * Servlet implementation class AgentServlet
@@ -62,6 +68,19 @@ public class AgentServlet extends HttpServlet {
 		Disco disco = interaction.getDisco();
 		interaction.load(path);
 		agente.agente(interaction, disco);
+		ArrayList<String> menu= agente.menu(interaction);
+		System.out.println(menu);
+		
+		//Creamos el json para mandar la respuesta al jsp
+		Gson gson = new Gson();
+		String json = gson.toJson(menu);
+		misession.setAttribute("json",json);
+		request.getRequestDispatcher("/Agent.jsp").forward(request, response);	
+		
+		
+		misession.invalidate();
+		
+		//System.out.println(agente.agente(interaction, disco));
 		//agente.user(Propose.Should.newInstance(disco, true, interaction.getTaskClass("Borrow").newInstance()),
 		           // null argument allows plan recognition to determine contributes
 		       //    null, interaction); 

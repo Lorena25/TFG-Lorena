@@ -5,6 +5,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c-rt" %>
+<%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
+<%@ page import="net.sf.json.JSONObject" %>
+<%@ page import="net.sf.json.JSONArray" %>
 <%@page isELIgnored="false"%>
 <html>
 <head>
@@ -27,6 +30,15 @@
 				</li>
     </td>
 </c:forEach>
+<table>
+    <c:forEach items="${json}" var="json">
+        <tr>
+            <td>${json}</td>
+         
+        </tr>
+    </c:forEach>
+</table>
+
 
 </body>
 </html>

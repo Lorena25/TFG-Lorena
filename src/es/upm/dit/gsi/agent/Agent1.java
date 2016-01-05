@@ -1,13 +1,16 @@
 package es.upm.dit.gsi.agent;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.json.JSONObject;
 import es.upm.dit.gsi.*;
 import edu.wpi.cetask.*;
 import edu.wpi.disco.*;
 import edu.wpi.disco.Agenda.Plugin;
 import edu.wpi.disco.lang.*;
 import edu.wpi.disco.Agent;
+import net.sf.json.JSONObject;
 
 /**
  * This class illustrates the appropriate methods to use to embed Disco 
@@ -33,6 +36,7 @@ public class Agent1 {
    //Interaction interaction = interact2();
 private final Agent agent = new MyAgent("agent");
 private final User user = new User("user");
+private ArrayList<String> menu= new ArrayList<String>();
   // private final Disco disco = interaction.getDisco(); 
    //private final boolean 
      //    guess = interaction.getProperty("interaction@guess", true),
@@ -45,14 +49,15 @@ public String agente (Interaction interaction, Disco disco) {
 
        agent(interaction);
        
-       List<Plugin.Item> items1 = interaction.getExternal().generate(interaction);
+      
        // print out formatted choices on system console
-     menu(interaction);
+    // menu(interaction);
        // choose second utterance from menu
       // Plugin.Item item = items1.get(1);
      //  user(item.task, item.contributes, interaction);
-
-
+     return "";
+}
+public String segunda(Interaction interaction, Disco disco){
        user(newInstance("GoToLibrary", interaction), null, interaction);
 
 
@@ -60,7 +65,12 @@ public String agente (Interaction interaction, Disco disco) {
 
   
   menu(interaction);
-     
+ return "";
+}
+
+public String tercera (Interaction interaction, Disco disco){
+	
+
 
        user(new Propose.What(disco, true, 
              newInstance("ChooseBook", interaction), 
@@ -68,13 +78,12 @@ public String agente (Interaction interaction, Disco disco) {
              interaction.eval("new Book(\"Sawyer\", \"Mindscan\")", "ComponentExample")),
              null, interaction);
 
-
        agent(interaction);
 
        // example of generating menu of possible user utterances, e.g., for GUI
        // or to restrict grammar for speech recognition
 
-     menu(interaction);
+   //  menu(interaction);
        // choose second utterance from menu
         //item = items.get(0);
       // user(item.task, item.contributes, interaction);
@@ -82,12 +91,20 @@ public String agente (Interaction interaction, Disco disco) {
        return "";
     }
 
-public void menu (Interaction interaction){
-	 List<Plugin.Item> items = interaction.getExternal().generate(interaction);
+public ArrayList<String> menu (Interaction interaction){
+	  menu.clear();
+	List<Plugin.Item> items = interaction.getExternal().generate(interaction);
      // print out formatted choices on system console
-     System.out.println();
-     for (Plugin.Item item : items) 
-        System.out.println("MENU: "+interaction.format(item, true, true));
+	 for (Plugin.Item item : items) {
+    	 for (int i = 0; i < 1; i++) {
+    	String p = interaction.format(item, true, true);
+    	System.out.println("MENU ROUTER: "+p);
+    	menu.add(i, p);
+    	 }
+     }
+	
+	 return menu;
+     
 }
  
    public void lorena(Interaction interaction, Disco disco) {
