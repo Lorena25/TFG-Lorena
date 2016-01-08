@@ -3,8 +3,16 @@ package es.upm.dit.gsi;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+
+import atg.taglib.json.util.JSONException;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import edu.wpi.disco.Agent;
@@ -56,14 +64,14 @@ public class AgentServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		HttpSession misession= (HttpSession)request.getSession();
+		HttpSession session= (HttpSession)request.getSession();
 		//Creamos sesion y guardamos el agente1 en una variable
-		if ( (Agent1)misession.getAttribute("misessionagent") == null){
+		if ( (Agent1)session.getAttribute("misessionagent") == null){
 			Agent1 agente1 = new Agent1();
-			misession.setAttribute("misessionagent", agente1);
+			session.setAttribute("misessionagent", agente1);
 		}
 		
-		Agent1 agente= (Agent1)misession.getAttribute("misessionagent");
+		Agent1 agente= (Agent1)session.getAttribute("misessionagent");
 		Interaction interaction = agente.interact2();
 		Disco disco = interaction.getDisco();
 		interaction.load(path);
@@ -72,13 +80,31 @@ public class AgentServlet extends HttpServlet {
 		System.out.println(menu);
 		
 		//Creamos el json para mandar la respuesta al jsp
-		Gson gson = new Gson();
-		String json = gson.toJson(menu);
-		misession.setAttribute("json",json);
+		//Gson gson = new Gson();
+		/*JsonObject object = new JsonObject();
+		JsonArray menujson = new JsonArray();
+		
+		for(int i =0; i<menu.size(); i++){
+		object.addProperty("menu", menu.get(i));
+		menujson.add(object);
+		}
+	
+		System.out.println(menujson);
+		*/
+		JsonArray json = new JsonArray();
+        for(int i=0;i<(menu.size());i++){
+		        JsonObject list1 = new JsonObject();
+		        list1.addProperty("menu",menu.get(i));
+		        json.add(list1);
+		}
+        System.out.println(json);
+    
+		//String json = gson.toJson(menu);
+		session.setAttribute("json", json);	
 		request.getRequestDispatcher("/Agent.jsp").forward(request, response);	
 		
 		
-		misession.invalidate();
+		session.invalidate();
 		
 		//System.out.println(agente.agente(interaction, disco));
 		//agente.user(Propose.Should.newInstance(disco, true, interaction.getTaskClass("Borrow").newInstance()),
