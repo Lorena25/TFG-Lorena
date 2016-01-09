@@ -1,0 +1,37 @@
+<taskModel xmlns="http://ce.org/cea-2018" about="urn:cetask.wpi.edu:examples:Library">
+<task id="SwitchRouter">
+	<input name="router" type="string"/>
+	<subtasks id="switching">
+		<step name="connect" task="ConnectRouter"/>
+		<step name="turnon" task="TurnOnRouter"/>
+		<step name="test" task="TestRouter"/>
+	</subtasks>
+</task>
+<task id="ConnectRouter">
+	<subtasks id="connecting">
+		<step name="light" task="ConnectedToLight"/>
+		<step name="ADSL" task="ConnectedToADSL"/>
+	</subtasks>
+</task>
+<task id="TurnOnRouter">
+	<subtasks id="turn">
+		<step name="button" task="PushButtonOn"/>
+		<step name="reset" task="PushButtonReset"/>
+	</subtasks>
+</task>
+<task id="TestRouter">
+	<subtasks id="testing">
+		<step name="lightOn" task="TestLightOn"/>
+		<step name="lightWifi" task="TestLightWifi"/>
+		<step name="lightInternet" task="TestLighInternet"/>
+	</subtasks>
+</task>
+<task id="ConnectedToLight"/>
+<task id="PushButtonOn"/>
+<task id="ConnectedToADSL"/>
+<task id="PushButtonReset"/>
+<task id="TestLightOn"/>
+<task id="TestLightWifi"/>
+<task id="TestLighInternet"/>
+
+</taskModel>

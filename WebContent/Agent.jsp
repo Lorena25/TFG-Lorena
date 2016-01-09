@@ -9,6 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c-rt" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <%@ page import="net.sf.json.JSONObject" %>
@@ -25,30 +26,8 @@
  <jsp:scriptlet>
   String [] elementos = new String []{"Router","Calefacción","Persianas"};
 	pageContext.setAttribute("elementos", elementos);
-	
-	 JsonArray json = (JsonArray)session.getAttribute("json");
-	 System.out.println(json);
-	 JsonObject lore= new JsonObject();
-	 JsonElement fin ;
-	 JsonElement hola;
-	if (json != null){
-		 hola = json.get(1);
-		 lore= hola.getAsJsonObject();
-		 System.out.println(lore);
-		 fin=lore.get("menu");
-		 System.out.println(fin);
-		
-	}else{
-		System.out.println( "caca");
-	}
-	
-	
-	
-	
 </jsp:scriptlet>
 
-
- <c:out value="que tal : ${pageScope.hola}" />  
  
 <c:forEach var="element" items="${pageScope.elementos}" >
     <td>
@@ -60,14 +39,11 @@
     </td>
 </c:forEach>
 
-   	 
-<c:if test="${json!=null}">
-<c:forTokens var="elements" items="${session.getAttribute("json")} delims="," >
-   <c:out value="${elements}"/>
 
-</c:forTokens>
-    
-</c:if>
-
+<c:forEach var="menu" items="${json}" >
+    <td>   
+       <li> ${menu}</li>
+    </td>
+</c:forEach>
 </body>
 </html>

@@ -78,32 +78,8 @@ public class AgentServlet extends HttpServlet {
 		agente.agente(interaction, disco);
 		ArrayList<String> menu= agente.menu(interaction);
 		System.out.println(menu);
-		
-		//Creamos el json para mandar la respuesta al jsp
-		//Gson gson = new Gson();
-		/*JsonObject object = new JsonObject();
-		JsonArray menujson = new JsonArray();
-		
-		for(int i =0; i<menu.size(); i++){
-		object.addProperty("menu", menu.get(i));
-		menujson.add(object);
-		}
-	
-		System.out.println(menujson);
-		*/
-		JsonArray json = new JsonArray();
-        for(int i=0;i<(menu.size());i++){
-		        JsonObject list1 = new JsonObject();
-		        list1.addProperty("menu",menu.get(i));
-		        json.add(list1);
-		}
-        System.out.println(json);
-    
-		//String json = gson.toJson(menu);
-		session.setAttribute("json", json);	
-		request.getRequestDispatcher("/Agent.jsp").forward(request, response);	
-		
-		
+		session.setAttribute("json", menu);	
+		request.getRequestDispatcher("/Agent.jsp").forward(request, response);
 		session.invalidate();
 		
 		//System.out.println(agente.agente(interaction, disco));

@@ -44,7 +44,7 @@ private ArrayList<String> menu= new ArrayList<String>();
 public String agente (Interaction interaction, Disco disco) {
     
   
-       user(Propose.Should.newInstance(disco, true, newInstance("Borrow", interaction)),
+      user(Propose.Should.newInstance(disco, true, newInstance("ConfigureThermostat", interaction)),
              null, interaction); 
 
        agent(interaction);
@@ -58,7 +58,7 @@ public String agente (Interaction interaction, Disco disco) {
      return "";
 }
 public String segunda(Interaction interaction, Disco disco){
-       user(newInstance("GoToLibrary", interaction), null, interaction);
+       user(newInstance("ConnectRouter", interaction), null, interaction);
 
 
        agent(interaction);
@@ -93,7 +93,7 @@ public String tercera (Interaction interaction, Disco disco){
 
 public ArrayList<String> menu (Interaction interaction){
 	  menu.clear();
-	List<Plugin.Item> items = interaction.getExternal().generate(interaction);
+	List<Plugin.Item> items = user.generate(interaction);
      // print out formatted choices on system console
 	 for (Plugin.Item item : items) {
     	 for (int i = 0; i < 1; i++) {
