@@ -11,12 +11,14 @@
 	<subtasks id="connecting">
 		<step name="light" task="ConnectedToLight"/>
 		<step name="ADSL" task="ConnectedToADSL"/>
+		  <binding slot="$light.external" value="true"/>
 	</subtasks>
 </task>
 <task id="TurnOnRouter">
 	<subtasks id="turn">
 		<step name="button" task="PushButtonOn"/>
 		<step name="reset" task="PushButtonReset"/>
+		<binding slot="$button.external" value="true"/>
 	</subtasks>
 </task>
 <task id="TestRouter">
@@ -27,8 +29,8 @@
 	</subtasks>
 </task>
 <task id="ConnectedToLight"/>
-<task id="PushButtonOn"/>
 <task id="ConnectedToADSL"/>
+<task id="PushButtonOn"/>
 <task id="PushButtonReset"/>
 <task id="TestLightOn"/>
 <task id="TestLightWifi"/>

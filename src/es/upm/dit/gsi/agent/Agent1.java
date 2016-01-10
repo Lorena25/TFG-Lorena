@@ -37,6 +37,7 @@ public class Agent1 {
 private final Agent agent = new MyAgent("agent");
 private final User user = new User("user");
 private ArrayList<String> menu= new ArrayList<String>();
+
   // private final Disco disco = interaction.getDisco(); 
    //private final boolean 
      //    guess = interaction.getProperty("interaction@guess", true),
@@ -44,12 +45,15 @@ private ArrayList<String> menu= new ArrayList<String>();
 public String agente (Interaction interaction, Disco disco) {
     
   
-      user(Propose.Should.newInstance(disco, true, newInstance("ConfigureThermostat", interaction)),
-             null, interaction); 
+    // user(Propose.Should.newInstance(disco, true, newInstance("SwitchRouter", interaction)),
+      //     null, interaction); 
+	 
 
-       agent(interaction);
-       
+       //agent(interaction);
       
+       agent.respond(interaction, true, interaction.getProperty("interaction@guess", true), interaction.getProperty("interaction@retry", true));
+      // consola.respond(interaction);
+       
        // print out formatted choices on system console
     // menu(interaction);
        // choose second utterance from menu
@@ -58,7 +62,7 @@ public String agente (Interaction interaction, Disco disco) {
      return "";
 }
 public String segunda(Interaction interaction, Disco disco){
-       user(newInstance("ConnectRouter", interaction), null, interaction);
+       user(newInstance("ConnectedToLight", interaction), null, interaction);
 
 
        agent(interaction);
@@ -78,7 +82,7 @@ public String tercera (Interaction interaction, Disco disco){
              interaction.eval("new Book(\"Sawyer\", \"Mindscan\")", "ComponentExample")),
              null, interaction);
 
-       agent(interaction);
+     //  agent(interaction);
 
        // example of generating menu of possible user utterances, e.g., for GUI
        // or to restrict grammar for speech recognition
@@ -93,8 +97,10 @@ public String tercera (Interaction interaction, Disco disco){
 
 public ArrayList<String> menu (Interaction interaction){
 	  menu.clear();
-	List<Plugin.Item> items = user.generate(interaction);
+	List<Plugin.Item> items =interaction.getExternal().generate(interaction);
+	
      // print out formatted choices on system console
+	System.out.println(items);
 	 for (Plugin.Item item : items) {
     	 for (int i = 0; i < 1; i++) {
     	String p = interaction.format(item, true, true);
@@ -138,9 +144,9 @@ public ArrayList<String> menu (Interaction interaction){
 	   Interaction interaction = new Interaction(agent, new User("user"));
 	  return interaction;
 	   } 
-   
-
-
+public void hola(Interaction interaction){
+interaction.run();
+}
   public boolean agent (Interaction interaction) {      
        //see simple model for agent turn at Agent.respond()
       return interaction.getSystem().respond(interaction, false, interaction.getProperty("interaction@guess", true),

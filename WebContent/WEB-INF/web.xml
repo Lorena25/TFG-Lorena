@@ -26,7 +26,7 @@
     <servlet-class>es.upm.dit.gsi.AgentServlet</servlet-class>
    	 <init-param>
         <param-name>path</param-name>
-        <param-value>/Users/lorenasanchomayoral/Documents/workspace/Proyecto/WebContent/WEB-INF/models/Thermostat.xml</param-value>
+        <param-value>/Users/lorenasanchomayoral/Documents/workspace/Proyecto/WebContent/WEB-INF/models/Router.xml</param-value>
      </init-param>
     
   </servlet>

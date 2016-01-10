@@ -74,11 +74,27 @@ public class AgentServlet extends HttpServlet {
 		Agent1 agente= (Agent1)session.getAttribute("misessionagent");
 		Interaction interaction = agente.interact2();
 		Disco disco = interaction.getDisco();
+		
 		interaction.load(path);
-		agente.agente(interaction, disco);
+		//agente.agente(interaction, disco);
+		//agente.hola(interaction);
+	
+		disco.addTop(interaction.getTaskClass("SwitchRouter").newInstance());
+		interaction.doTurn(true);
+		disco.getFormat((interaction.getTaskClass("SwitchRouter").newInstance()));
+		System.out.println(interaction.getTaskClass("SwitchRouter").newInstance());
+		System.out.println(disco.getFormat((interaction.getTaskClass("SwitchRouter").newInstance())));
+		//agente.user(interaction.getTaskClass("SwitchRouter").newInstance(),null,interaction);
+		//agente.agente(interaction, disco);
+		disco.addTop(interaction.getTaskClass("ConnectRouter").newInstance());
+		interaction.doTurn(true);
+		//interaction.run();
+		//System.out.println(interaction);
 		ArrayList<String> menu= agente.menu(interaction);
 		System.out.println(menu);
-		session.setAttribute("json", menu);	
+		//interaction.doTurn();
+		//agente.segunda(interaction, disco);
+		//session.setAttribute("json", menu);	
 		request.getRequestDispatcher("/Agent.jsp").forward(request, response);
 		session.invalidate();
 		
