@@ -188,5 +188,6 @@ interaction.run();
     	System.out.println();
          System.out.println("AGENT: "+interaction.format(utterance));
       }
+      
    }
 }

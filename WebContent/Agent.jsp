@@ -10,6 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c-rt" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <%@ page import="net.sf.json.JSONObject" %>
@@ -38,12 +39,20 @@
 				</li>
     </td>
 </c:forEach>
+<center>
 
+<c:if test="${agente!= null}">
+<b><c:out value="Agente router dice:"/></b>
+</c:if>
+<br><textarea rows="4" cols="30">
+<c:out value="${agente}"/>
+</textarea>
 
+<form action="AgentServlet" method="get">
 <c:forEach var="menu" items="${json}" >
-    <td>   
-       <li> ${menu}</li>
-    </td>
+<input type="submit" name="submit" value="${menu}"/>
 </c:forEach>
+</form>
+</center>
 </body>
 </html>

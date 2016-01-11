@@ -25,7 +25,9 @@ import edu.wpi.disco.lang.Propose.ShouldNot;
 import edu.wpi.disco.lang.Utterance;
 import edu.wpi.disco.plugin.ProposeShouldNotPlugin;
 import es.upm.dit.gsi.agent.Agent1;
-import es.upm.dit.gsi.agent.Agent1.MyAgent;
+import es.upm.dit.gsi.agent.RouterAgent;
+import es.upm.dit.gsi.agent.RouterAgent.MyAgent;
+
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -45,7 +47,8 @@ public class AgentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected String path = null;
 	private String[] args;
-
+	ArrayList<String> menu= new ArrayList<String>();
+	String hola="";
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -66,56 +69,56 @@ public class AgentServlet extends HttpServlet {
 		
 		HttpSession session= (HttpSession)request.getSession();
 		//Creamos sesion y guardamos el agente1 en una variable
-		if ( (Agent1)session.getAttribute("misessionagent") == null){
-			Agent1 agente1 = new Agent1();
+		if ( (RouterAgent)session.getAttribute("misessionagent") == null){
+			RouterAgent agente1 = new RouterAgent();
 			session.setAttribute("misessionagent", agente1);
 		}
 		
-		Agent1 agente= (Agent1)session.getAttribute("misessionagent");
-		Interaction interaction = agente.interact2();
+		RouterAgent agente= (RouterAgent)session.getAttribute("misessionagent");
+		Interaction interaction = agente.interaction();
 		Disco disco = interaction.getDisco();
-		
 		interaction.load(path);
-		//agente.agente(interaction, disco);
-		//agente.hola(interaction);
-	
-		disco.addTop(interaction.getTaskClass("SwitchRouter").newInstance());
-		interaction.doTurn(true);
-		disco.getFormat((interaction.getTaskClass("SwitchRouter").newInstance()));
-		System.out.println(interaction.getTaskClass("SwitchRouter").newInstance());
-		System.out.println(disco.getFormat((interaction.getTaskClass("SwitchRouter").newInstance())));
-		//agente.user(interaction.getTaskClass("SwitchRouter").newInstance(),null,interaction);
-		//agente.agente(interaction, disco);
-		disco.addTop(interaction.getTaskClass("ConnectRouter").newInstance());
-		interaction.doTurn(true);
-		//interaction.run();
-		//System.out.println(interaction);
-		ArrayList<String> menu= agente.menu(interaction);
-		System.out.println(menu);
+		agente.agente(interaction, disco);
+		
+		String nombre=(String)request.getParameter("submit");
+		System.out.println(nombre);
+		if(nombre!=null){
+		if(nombre.equals(menu.get(1))){
+			System.out.println("LORENA");
+			agente.lore(interaction, disco);
+			menu=agente.menu(interaction);
+			MyAgent agent = agente.new MyAgent("agent");
+			hola=agent.getAtributo();
+			session.setAttribute("agente", hola);
+			session.setAttribute("json1", menu);	
+			response.sendRedirect("Agent.jsp");
+		}else if(nombre.equals(menu.get(0))){
+			agente.reject(interaction, disco);
+			MyAgent agent = agente.new MyAgent("agent");
+			hola=agent.getAtributo();
+			session.setAttribute("agente", hola);
+			response.sendRedirect("Agent.jsp");
+		}
+		
+		}else{
+		menu= agente.menu(interaction);
+		MyAgent agent = agente.new MyAgent("agent");
+		hola=agent.getAtributo();
+		//System.out.println(menu);
 		//interaction.doTurn();
 		//agente.segunda(interaction, disco);
-		//session.setAttribute("json", menu);	
-		request.getRequestDispatcher("/Agent.jsp").forward(request, response);
-		session.invalidate();
+		session.setAttribute("agente", hola);	
+		session.setAttribute("json", menu);	
+		response.sendRedirect("Agent.jsp");
 		
-		//System.out.println(agente.agente(interaction, disco));
-		//agente.user(Propose.Should.newInstance(disco, true, interaction.getTaskClass("Borrow").newInstance()),
-		           // null argument allows plan recognition to determine contributes
-		       //    null, interaction); 
-		//agente.agent(interaction);
-		 //agente.lorena(interaction, disco);
-		//System.out.println(Propose.Should.newInstance(disco, true, interaction.getTaskClass("Borrow").newInstance()));
-		
-		//interaction.occurred(true, interaction.getTaskClass("GoToLibrary").newInstance(), null);
-  //  System.out.println(Propose.Should.newInstance(disco, true, interaction.getTaskClass("GoToLibrary").newInstance())); 
-	//agente.agent(interaction);
-   // agente.lorena(interaction, disco);
-	
-       
-		
-		
-		
+		}
 	}
+		
+		
+		//session.invalidate();
+		
+		
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
