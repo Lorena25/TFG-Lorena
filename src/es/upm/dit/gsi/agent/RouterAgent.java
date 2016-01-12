@@ -25,7 +25,7 @@ public void agente(Interaction interaction, Disco disco){
 	disco.addTop(interaction.getTaskClass("SwitchRouter").newInstance());
 	interaction.doTurn(true);	
 }
-public void lore(Interaction interaction, Disco disco){
+public void agente1(Interaction interaction, Disco disco){
 	interaction.run();
 	disco.addTop(interaction.getTaskClass("ConnectRouter").newInstance());
 	interaction.doTurn(true);
@@ -48,7 +48,6 @@ public ArrayList<String> menu (Interaction interaction){
 	List<Plugin.Item> items =interaction.getExternal().generate(interaction);
 	
    // print out formatted choices on system console
-	System.out.println(items);
 	 for (Plugin.Item item : items) {
   	 for (int i = 0; i < 1; i++) {
   	String p = interaction.format(item, true, true);
@@ -64,18 +63,6 @@ public ArrayList<String> menu (Interaction interaction){
 public class MyAgent extends Agent {
     
     public MyAgent (String name) { super(name); }
-    
-    public void occurred (Interaction interaction, Plugin.Item item, boolean retry) { 
-        synchronized (interaction) { // typically used in dialogue loop
-           interaction.occurred(this == interaction.getExternal(), 
-                 item.task, item.contributes);
-           if ( item.task instanceof Utterance ) { // after occurred
-              lastUtterance = (Utterance) item.task;
-              say(interaction, (Utterance) item.task);
-           }
-           if ( retry ) retry(interaction.getDisco());  // see also in respond
-        }
-     }
      
      public void say(Interaction interaction, Utterance utterance) {
         // here is where you would put natural language generation

@@ -1,5 +1,6 @@
 package es.upm.dit.gsi;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -40,86 +41,46 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
-
 /**
- * Servlet implementation class AgentServlet
+ * Servlet implementation class WebAgentServlet
  */
 
-public class AgentServlet extends HttpServlet {
+public class WebAgentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected String path = null;
-	ArrayList<String> menu= new ArrayList<String>();
-	String hola="";
+	private String misession= null;
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AgentServlet() {
+    public WebAgentServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
-    //guardamos el parametro inicial, que es la URL referente al modelo a cargar, tenemos varios modelos
-    //uno para cada elemento a configurar
     public void init(ServletConfig servletConfig) throws ServletException{
         this.path = servletConfig.getInitParameter("path");
      }
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// TODO Auto-generated method stub
 		HttpSession session= (HttpSession)request.getSession();
 		//Creamos sesion y guardamos el agente1 en una variable
-		if ( (RouterAgent)session.getAttribute("misessionagent") == null){
+		if ( (RouterAgent)session.getAttribute(misession) == null){
 			RouterAgent agente1 = new RouterAgent();
-			session.setAttribute("misessionagent", agente1);
+			session.setAttribute("misession", agente1);
 		}
 		
-		RouterAgent agente= (RouterAgent)session.getAttribute("misessionagent");
+
+		json(request.getParameter("userAgent"),request.getParameter("type"),request.getParameter("q"));
+		/*RouterAgent agente= (RouterAgent)session.getAttribute("misession");
 		Interaction interaction = agente.interaction();
 		Disco disco = interaction.getDisco();
 		String taskPath = session.getServletContext().getResource(path).getPath();
 		interaction.load(taskPath);
 		agente.agente(interaction, disco);
-		
-		String nombre=(String)request.getParameter("submit");
-		System.out.println(nombre);
-		if(nombre!=null){
-		if(nombre.equals(menu.get(1))){
-			
-			System.out.println("LORENA");
-			agente.agente1(interaction, disco);
-			menu=agente.menu(interaction);
-			MyAgent agent = agente.new MyAgent("agent");
-			hola=agent.getAtributo();
-			session.setAttribute("agente", hola);
-			session.setAttribute("json1", menu);	
-			response.sendRedirect("Agent.jsp");
-			
-				}else if(nombre.equals(menu.get(0))){
-					agente.reject(interaction, disco);
-					MyAgent agent = agente.new MyAgent("agent");
-					hola=agent.getAtributo();
-					session.setAttribute("agente", hola);
-					response.sendRedirect("Agent.jsp");
-		}
-		
-		}else{
-		menu= agente.menu(interaction);
-		MyAgent agent = agente.new MyAgent("agent");
-		hola=agent.getAtributo();
-		session.setAttribute("agente", hola);	
-		session.setAttribute("json", menu);	
-		response.sendRedirect("Agent.jsp");
-		
-		}
+		agente.menu(interaction);*/
 	}
-		
-		
-		//session.invalidate();
-		
-		
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -129,4 +90,21 @@ public class AgentServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-}
+	public JSONObject json(String userAgent, String type, String q){
+		JSONObject json= new JSONObject();
+		JSONObject dialog= new JSONObject();
+		json.put("userAgent", userAgent);
+		json.put("type", type);
+		json.put("mood", "");
+		json.put("q", q);
+		dialog.put("dialog", json);
+		System.out.println(dialog);
+	return json;
+	
+	}
+		
+	
+	}
+	
+	
+
