@@ -20,6 +20,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Agente</title>
+  <script src="js/jquery.js"></script>
+    <script src="js/content_script.js"></script>
+    <script src="js/jquery.scrollTo.js"></script>
 </head>
 <body>
 <h1>Agente para configurar una casa</h1>
@@ -93,6 +96,7 @@
             </div><!-- #userbar -->
           </div><!-- #screen_wrapper -->
       </div><!-- #bot_chat_window -->
+      <c:out value= "${json }"></c:out>
   </body>
 </html>
 </body>

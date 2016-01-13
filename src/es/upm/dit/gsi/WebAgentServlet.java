@@ -49,6 +49,7 @@ public class WebAgentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected String path = null;
 	private String misession= null;
+	RouterAgent agente1;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -67,19 +68,30 @@ public class WebAgentServlet extends HttpServlet {
 		HttpSession session= (HttpSession)request.getSession();
 		//Creamos sesion y guardamos el agente1 en una variable
 		if ( (RouterAgent)session.getAttribute(misession) == null){
-			RouterAgent agente1 = new RouterAgent();
+			agente1 = new RouterAgent();
 			session.setAttribute("misession", agente1);
+		
 		}
 		
-
-		json(request.getParameter("userAgent"),request.getParameter("type"),request.getParameter("q"));
-		/*RouterAgent agente= (RouterAgent)session.getAttribute("misession");
-		Interaction interaction = agente.interaction();
+		agente1= (RouterAgent)session.getAttribute("misession");
+		
+		Interaction interaction = agente1.interaction();
 		Disco disco = interaction.getDisco();
 		String taskPath = session.getServletContext().getResource(path).getPath();
 		interaction.load(taskPath);
-		agente.agente(interaction, disco);
-		agente.menu(interaction);*/
+		System.out.println(taskPath);
+		agente1.agente1(interaction, disco);
+		agente1.menu(interaction);
+		agente1.agente3(interaction, disco);
+		System.out.println(agente1.menu(interaction));
+		MyAgent agent = agente1.new MyAgent("agent");
+		
+		
+		JSONObject json =json(agent.getAtributo(),request.getParameter("userAgent"),request.getParameter("type"),request.getParameter("q"));
+		session.setAttribute("json", json);
+		//interaction.run();
+		
+		response.sendRedirect("AgentView.jsp");
 	}
 
 	/**
@@ -90,9 +102,10 @@ public class WebAgentServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-	public JSONObject json(String userAgent, String type, String q){
+	public JSONObject json( String response, String userAgent, String type, String q){
 		JSONObject json= new JSONObject();
 		JSONObject dialog= new JSONObject();
+		json.put("response", response);
 		json.put("userAgent", userAgent);
 		json.put("type", type);
 		json.put("mood", "");

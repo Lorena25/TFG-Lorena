@@ -21,15 +21,24 @@ private  String agente = "";
 	 
 	 
 public void agente(Interaction interaction, Disco disco){
+	disco.addTop(interaction.getTaskClass("WebAgent").newInstance());
+	interaction.doTurn(true);
 	
-	disco.addTop(interaction.getTaskClass("SwitchRouter").newInstance());
-	interaction.doTurn(true);	
 }
 public void agente1(Interaction interaction, Disco disco){
 	interaction.run();
+	disco.addTop(interaction.getTaskClass("SwitchRouter").newInstance());
+	interaction.doTurn(true);
+}
+public void agente2(Interaction interaction, Disco disco){
+	interaction.run();
+	disco.addTop(interaction.getTaskClass("ConfigureThermostat").newInstance());
+	interaction.doTurn(true);
+}
+public void agente3(Interaction interaction, Disco disco){
+	interaction.run();
 	disco.addTop(interaction.getTaskClass("ConnectRouter").newInstance());
 	interaction.doTurn(true);
-	
 }
 public void reject(Interaction interaction, Disco disco){
 	
@@ -51,7 +60,7 @@ public ArrayList<String> menu (Interaction interaction){
 	 for (Plugin.Item item : items) {
   	 for (int i = 0; i < 1; i++) {
   	String p = interaction.format(item, true, true);
-  	System.out.println("MENU ROUTER: "+p);
+  	//System.out.println("MENU ROUTER: "+p);
   	menu.add(i, p);
   	 }
    }

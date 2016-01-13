@@ -80,7 +80,7 @@ public class AgentServlet extends HttpServlet {
 		Disco disco = interaction.getDisco();
 		String taskPath = session.getServletContext().getResource(path).getPath();
 		interaction.load(taskPath);
-		agente.agente(interaction, disco);
+		agente.agente1(interaction, disco);
 		
 		String nombre=(String)request.getParameter("submit");
 		System.out.println(nombre);
@@ -105,6 +105,7 @@ public class AgentServlet extends HttpServlet {
 		}
 		
 		}else{
+			
 		menu= agente.menu(interaction);
 		MyAgent agent = agente.new MyAgent("agent");
 		hola=agent.getAtributo();
